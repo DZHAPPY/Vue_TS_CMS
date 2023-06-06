@@ -14,3 +14,10 @@ export function getUserInfoById(id: number) {
     url: '/users/' + id.toString()
   })
 }
+
+// 获取用户的菜单Byid
+export function getUserMenusByRoleId(id: number) {
+  return hyRequest.get({
+    url: `/role/${id}/menu`
+  })
+}

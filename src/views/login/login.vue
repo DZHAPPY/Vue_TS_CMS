@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import loginPanelVue from './components/login-panel.vue'
+import { onMounted, ref, onBeforeUnmount } from 'vue'
 </script>
 
 <template>
@@ -16,6 +17,6 @@ import loginPanelVue from './components/login-panel.vue'
   width: 100%;
   height: 100%;
   // background-color: red;
-  background-image: url('@/assets/images/login-bg.svg');
+  // background-image: url('@/assets/images/login-bg.svg');
 }
 </style>

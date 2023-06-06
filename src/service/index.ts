@@ -9,10 +9,9 @@ const hyRequest = new HYRequest({
   interceptors: {
     requestSuccessFn(config) {
       const token = SessionCache.getCache(LOGIN_TOKEN)
-      console.log(token)
 
       if (config.headers && token) {
-        config.headers.Authorization = 'Bearer' + token
+        config.headers.Authorization = 'Bearer ' + token
       }
       return config
     }
