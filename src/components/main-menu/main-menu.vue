@@ -25,6 +25,7 @@ const props = defineProps({
         text-color="#b7bdc3"
         background-color="#001529"
         :collapse="!props.isFlod"
+        :collapse-transition="false"
       >
         <template v-for="item in userMenus" :key="item.id">
           <el-sub-menu :index="item.id + ''">
