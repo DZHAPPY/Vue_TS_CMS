@@ -1,7 +1,6 @@
 import { LOGIN_TOKEN } from '@/global/constants'
 import { SessionCache } from '@/utils/cache'
-import { createRouter, createWebHashHistory, routerKey } from 'vue-router'
-
+import { createRouter, createWebHashHistory } from 'vue-router'
 const router = createRouter({
   history: createWebHashHistory(),
   routes: [
@@ -14,6 +13,7 @@ const router = createRouter({
       component: () => import('../views/login/login.vue')
     },
     {
+      name: 'main',
       path: '/main',
       component: () => import('../views/main/main.vue')
     },

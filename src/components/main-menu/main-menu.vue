@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import router from '@/router'
 import useLoginStore from '@/store/Login/login'
 
 // 获取动态菜单的数据
@@ -11,6 +12,11 @@ const props = defineProps({
     default: false
   }
 })
+
+const handleItemClick = (item: any) => {
+  const url = item.url
+  router.push(url)
+}
 </script>
 
 <template>
@@ -36,7 +42,9 @@ const props = defineProps({
               <span>{{ item.name }}</span>
             </template>
             <template v-for="subitem in item.children" :key="subitem.id">
-              <el-menu-item>{{ subitem.name }}</el-menu-item>
+              <el-menu-item :index="subitem.id + ''" @click="handleItemClick(subitem)">{{
+                subitem.name
+              }}</el-menu-item>
             </template>
           </el-sub-menu>
         </template>

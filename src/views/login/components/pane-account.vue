@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { reactive, ref } from 'vue'
 import type { FormRules, ElForm } from 'element-plus'
-import { ElMessage } from 'element-plus'
+import { ElMessage, ElNotification } from 'element-plus'
 import useLoginStore from '@/store/Login/login'
 
 const [USERNAME, PASSWORD] = ['name', 'password']
@@ -35,30 +35,28 @@ function loginAction(isRemPwd: boolean) {
   // 判断用户输入的帐号与密码是否符合规则
   FormRef.value?.validate((valid, fields) => {
     if (valid) {
-      loginStore.loginAccountAction({ name, password }).then(() => {
-        if (isRemPwd) {
-          localStorage.setItem(USERNAME, name)
-          localStorage.setItem(PASSWORD, password)
-        } else {
-          console.log(123)
-
-          localStorage.removeItem(USERNAME)
-          localStorage.removeItem(PASSWORD)
-        }
-      })
-      // 向服务器发送网络请求
-      // accountLoginRequest({ name, password }).then((res) => {
-      //   console.log('123', res)
-      //   ElMessage({
-      //     message: 'Congrats, this is a success message.',
-      //     type: 'success'
-      //   })
-      // })
+      loginStore
+        .loginAccountAction({ name, password })
+        .then(() => {
+          if (isRemPwd) {
+            localStorage.setItem(USERNAME, name)
+            localStorage.setItem(PASSWORD, password)
+          } else {
+            localStorage.removeItem(USERNAME)
+            localStorage.removeItem(PASSWORD)
+          }
+          ElMessage({
+            message: '登录成功',
+            type: 'success'
+          })
+        })
+        .catch(() => {
+          ElMessage.error('用户名或密码错误')
+        })
     } else {
-      console.log('error submit!', fields)
-
+      const errorMsg = fields!.password[0].message
       ElMessage({
-        message: '用户名或密码错误',
+        message: errorMsg,
         type: 'warning'
       })
     }

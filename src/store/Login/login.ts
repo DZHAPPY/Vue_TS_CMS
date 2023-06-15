@@ -3,6 +3,8 @@ import router from '@/router'
 import { accountLoginRequest, getUserInfoById, getUserMenusByRoleId } from '@/service/login/login'
 import { SessionCache } from '@/utils/cache'
 import { defineStore } from 'pinia'
+import type { RouteRecordRaw } from 'vue-router'
+
 const useLoginStore = defineStore('loginStore', {
   state: () => ({
     token: SessionCache.getCache(LOGIN_TOKEN) ?? '',
@@ -29,6 +31,31 @@ const useLoginStore = defineStore('loginStore', {
       // 进行本地缓存
       SessionCache.setCache(USERINFO, userInfoResult.data)
       SessionCache.setCache(USERMENUS, userMenusResult.data)
+
+      // 动态添加路由
+      const localRoutes: RouteRecordRaw[] = []
+      const files: Record<string, any> = import.meta.glob('../../router/main/**/*.ts', {
+        eager: true
+      })
+      for (let key in files) {
+        const module = files[key]
+        localRoutes.push(module.default)
+      }
+
+      for (const menu of this.userMenus) {
+        for (const submenu of menu.children) {
+          // console.log('test', submenu.url)
+
+          const route = localRoutes.find((item) => item.path === submenu.url)
+          if (route) {
+            console.log(123, route)
+
+            router.addRoute('main', route)
+          }
+        }
+      }
+
+      console.log(123, localRoutes)
 
       // 跳转页面
       router.push('/main')

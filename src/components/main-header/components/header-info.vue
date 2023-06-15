@@ -1,4 +1,21 @@
-<script setup lang="ts"></script>
+<script setup lang="ts">
+import { LOGIN_TOKEN } from '@/global/constants'
+import { SessionCache } from '@/utils/cache'
+import { ElNotification } from 'element-plus'
+import { useRouter } from 'vue-router'
+
+const router = useRouter()
+// 退出按钮点击事件
+const handleExitSysClick = () => {
+  SessionCache.removeCache(LOGIN_TOKEN)
+  router.push('/login')
+  // 推出消息通知
+  ElNotification({
+    title: '系统通知',
+    message: '你已成功退出账号'
+  })
+}
+</script>
 
 <template>
   <div class="header-info">
@@ -25,9 +42,15 @@
         </span>
         <template #dropdown>
           <el-dropdown-menu>
-            <el-dropdown-item >退出系统</el-dropdown-item>
-            <el-dropdown-item divided>个人信息</el-dropdown-item>
-            <el-dropdown-item>修改密码</el-dropdown-item>
+            <el-dropdown-item @click="handleExitSysClick"
+              ><el-icon><CircleClose /></el-icon><span>退出系统</span></el-dropdown-item
+            >
+            <el-dropdown-item divided
+              ><el-icon><Avatar /></el-icon><span>个人信息</span></el-dropdown-item
+            >
+            <el-dropdown-item
+              ><el-icon><Edit /></el-icon><span>修改密码</span></el-dropdown-item
+            >
           </el-dropdown-menu>
         </template>
       </el-dropdown>

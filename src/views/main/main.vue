@@ -21,7 +21,6 @@ const test123 = (isFlod: boolean) => {
   <div class="main">
     <!-- <h1>main</h1>
     <button @click="exitClick">退出登录</button> -->
-
     <el-container class="main-content">
       <el-aside :width="isCollapse ? '210px' : '70px'">
         <MainMenu :is-flod="isCollapse"></MainMenu>
@@ -30,7 +29,7 @@ const test123 = (isFlod: boolean) => {
         <el-header :height="'50px'">
           <MainHeader @flod-change="test123"></MainHeader>
         </el-header>
-        <el-main>Main</el-main>
+        <el-main><RouterView></RouterView></el-main>
       </el-container>
     </el-container>
   </div>
@@ -54,9 +53,9 @@ const test123 = (isFlod: boolean) => {
     .el-header {
       background-color: #fff;
     }
-    .el-main {
-      background-color: salmon;
-    }
+    // .el-main {
+    //   background-color: salmon;
+    // }
   }
 }
 </style>
