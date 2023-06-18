@@ -1,10 +1,13 @@
 <script setup lang="ts">
 import router from '@/router'
 import useLoginStore from '@/store/Login/login'
+import { firstMenu, mapPathToMenu } from '@/utils/map-menus'
+import { computed, ref } from 'vue'
+import { useRoute } from 'vue-router'
 
 // 获取动态菜单的数据
 const loginStore = useLoginStore()
-const userMenus = loginStore.userMenus
+const userMenus: any = loginStore.userMenus
 
 const props = defineProps({
   isFlod: {
@@ -17,6 +20,13 @@ const handleItemClick = (item: any) => {
   const url = item.url
   router.push(url)
 }
+
+// ELMenu默认选中菜单
+const route = useRoute()
+const defaultActive = computed(() => {
+  const pathMenu = mapPathToMenu(route.path, userMenus)
+  return pathMenu.id + ''
+})
 </script>
 
 <template>
@@ -27,7 +37,7 @@ const handleItemClick = (item: any) => {
     </div>
     <div class="menu">
       <el-menu
-        default-active="3"
+        :default-active="defaultActive"
         text-color="#b7bdc3"
         background-color="#001529"
         :collapse="!props.isFlod"

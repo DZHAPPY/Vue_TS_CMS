@@ -20,7 +20,9 @@ const handleMenuIconClick = () => {
       </el-icon>
     </div>
     <div class="menu-content">
-      <div class="breadcrumb">面包屑</div>
+      <div class="breadcrumb">
+        <header-breadcrumb></header-breadcrumb>
+      </div>
       <div class="info">
         <header-info></header-info>
       </div>

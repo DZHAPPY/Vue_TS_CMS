@@ -1,5 +1,6 @@
 import { LOGIN_TOKEN } from '@/global/constants'
 import { SessionCache } from '@/utils/cache'
+import { firstMenu } from '@/utils/map-menus'
 import { createRouter, createWebHashHistory } from 'vue-router'
 const router = createRouter({
   history: createWebHashHistory(),
@@ -31,6 +32,11 @@ router.beforeEach((to, from) => {
   if (to.path === '/main' && !token) {
     console.log('未找到token')
     return '/login'
+  }
+
+  // 如果进入到main页面
+  if (to.path === '/main') {
+    return firstMenu?.url
   }
 })
 

@@ -2,14 +2,15 @@ import { LOGIN_TOKEN, USERINFO, USERMENUS } from '@/global/constants'
 import router from '@/router'
 import { accountLoginRequest, getUserInfoById, getUserMenusByRoleId } from '@/service/login/login'
 import { SessionCache } from '@/utils/cache'
+import { mapMenusToRouter } from '@/utils/map-menus'
 import { defineStore } from 'pinia'
 import type { RouteRecordRaw } from 'vue-router'
 
 const useLoginStore = defineStore('loginStore', {
   state: () => ({
-    token: SessionCache.getCache(LOGIN_TOKEN) ?? '',
-    userInfo: SessionCache.getCache(USERINFO) ?? {},
-    userMenus: SessionCache.getCache(USERMENUS) ?? []
+    token: '',
+    userInfo: {},
+    userMenus: []
   }),
   actions: {
     async loginAccountAction(account: IAccount) {
@@ -33,32 +34,26 @@ const useLoginStore = defineStore('loginStore', {
       SessionCache.setCache(USERMENUS, userMenusResult.data)
 
       // 动态添加路由
-      const localRoutes: RouteRecordRaw[] = []
-      const files: Record<string, any> = import.meta.glob('../../router/main/**/*.ts', {
-        eager: true
-      })
-      for (let key in files) {
-        const module = files[key]
-        localRoutes.push(module.default)
-      }
-
-      for (const menu of this.userMenus) {
-        for (const submenu of menu.children) {
-          // console.log('test', submenu.url)
-
-          const route = localRoutes.find((item) => item.path === submenu.url)
-          if (route) {
-            console.log(123, route)
-
-            router.addRoute('main', route)
-          }
-        }
-      }
-
-      console.log(123, localRoutes)
+      const routes = mapMenusToRouter(this.userMenus)
+      routes.forEach((item) => router.addRoute('main', item))
 
       // 跳转页面
       router.push('/main')
+    },
+
+    loadLocalCacheAction() {
+      const token = SessionCache.getCache(LOGIN_TOKEN)
+      const userInfo = SessionCache.getCache(USERINFO)
+      const userMenus = SessionCache.getCache(USERMENUS)
+      if (token && userInfo && userMenus) {
+        this.token = token
+        this.userInfo = userInfo
+        this.userMenus = userMenus
+
+        // 动态添加路由
+        const routes = mapMenusToRouter(this.userMenus)
+        routes.forEach((item) => router.addRoute('main', item))
+      }
     }
   }
 })

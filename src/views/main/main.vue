@@ -10,7 +10,7 @@ const exitClick = () => {
   router.push('/login')
 }
 
-const isCollapse = ref(false)
+const isCollapse = ref(true)
 const test123 = (isFlod: boolean) => {
   console.log(isFlod)
   isCollapse.value = isFlod
@@ -53,9 +53,9 @@ const test123 = (isFlod: boolean) => {
     .el-header {
       background-color: #fff;
     }
-    // .el-main {
-    //   background-color: salmon;
-    // }
+    .el-main {
+      background-color: #eeeeee;
+    }
   }
 }
 </style>
