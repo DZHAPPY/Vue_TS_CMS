@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import userContentVue from './components/user-content.vue'
 import userSearchVue from './components/user-search.vue'
 </script>
 
@@ -7,7 +8,9 @@ import userSearchVue from './components/user-search.vue'
     <div class="search">
       <userSearchVue></userSearchVue>
     </div>
-    <div class="content"></div>
+    <div class="content">
+      <userContentVue></userContentVue>
+    </div>
   </div>
 </template>
 
@@ -17,6 +20,13 @@ import userSearchVue from './components/user-search.vue'
     background-color: #fff;
     border-radius: 5px;
     padding: 20px;
+  }
+  .content {
+    background-color: #fff;
+    margin-top: 20px;
+    padding: 1px 20px;
+    border-radius: 5px;
+    margin-bottom: 30px;
   }
 }
 </style>
