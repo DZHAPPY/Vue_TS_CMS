@@ -5,16 +5,27 @@ import { reactive, ref } from 'vue'
 // 搜索表单的数据
 const searchFromData = reactive({
   name: '',
-  realName: '',
-  phoneNum: '',
-  state: 0,
+  realname: '',
+  cellphone: '',
+  enable: 1,
   createAT: ''
 })
+
+// 自定义事件
+const emit = defineEmits(['queryClick', 'resetClick'])
 
 // 重置按钮的方法
 const formRef = ref<InstanceType<typeof ElForm>>()
 const handleResetClick = () => {
   formRef.value?.resetFields()
+
+  emit('resetClick')
+}
+
+// 查询按钮的方法
+const handleQueryClick = () => {
+  // console.log(searchFromData)
+  emit('queryClick', searchFromData)
 }
 </script>
 
@@ -26,16 +37,16 @@ const handleResetClick = () => {
           <el-form-item label="用户名" prop="name"> <el-input v-model="searchFromData.name" placeholder="请输入用户名" /> </el-form-item>
         </el-col>
         <el-col :span="8">
-          <el-form-item label="真实姓名" prop="realName"> <el-input placeholder="请输入姓名" v-model="searchFromData.realName" /> </el-form-item>
+          <el-form-item label="真实姓名" prop="realname"> <el-input placeholder="请输入姓名" v-model="searchFromData.realname" /> </el-form-item>
         </el-col>
         <el-col :span="8">
-          <el-form-item label="手机号码" prop="phoneNum"> <el-input placeholder="请输入手机号码" v-model="searchFromData.phoneNum" /> </el-form-item>
+          <el-form-item label="手机号码" prop="cellphone"> <el-input placeholder="请输入手机号码" v-model="searchFromData.cellphone" /> </el-form-item>
         </el-col>
       </el-row>
       <el-row :gutter="20">
         <el-col :span="8">
           <el-form-item label="状态" prop="state">
-            <el-select placeholder="请输入查询的状态" style="width: 100%" v-model="searchFromData.state">
+            <el-select placeholder="请输入查询的状态" style="width: 100%" v-model="searchFromData.enable">
               <el-option label="启用" :value="1" />
               <el-option label="禁用" :value="0" />
             </el-select>
@@ -49,7 +60,7 @@ const handleResetClick = () => {
       </el-row>
       <div class="btns">
         <el-button type="primary" plain icon="Refresh" size="default" @click="handleResetClick">重置</el-button>
-        <el-button type="primary" icon="Search" size="default">查询</el-button>
+        <el-button type="primary" icon="Search" size="default" @click="handleQueryClick">查询</el-button>
       </div>
     </el-form>
   </div>
@@ -57,7 +68,9 @@ const handleResetClick = () => {
 
 <style scoped lang="less">
 .user-search {
-  padding: 10px;
+  background-color: #fff;
+  border-radius: 5px;
+  padding: 20px;
   .el-form-item {
     padding: 10px;
   }
