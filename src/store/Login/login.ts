@@ -5,6 +5,7 @@ import { SessionCache } from '@/utils/cache'
 import { mapMenusToRouter } from '@/utils/map-menus'
 import { defineStore } from 'pinia'
 import type { RouteRecordRaw } from 'vue-router'
+import useMainStore from '../main/main'
 
 const useLoginStore = defineStore('loginStore', {
   state: () => ({
@@ -33,6 +34,10 @@ const useLoginStore = defineStore('loginStore', {
       SessionCache.setCache(USERINFO, userInfoResult.data)
       SessionCache.setCache(USERMENUS, userMenusResult.data)
 
+      // 请求roles/departments数据
+      const mainStore = useMainStore()
+      mainStore.fetchEntireDataAction()
+
       // 动态添加路由
       const routes = mapMenusToRouter(this.userMenus)
       routes.forEach((item) => router.addRoute('main', item))
@@ -41,6 +46,9 @@ const useLoginStore = defineStore('loginStore', {
       router.push('/main')
     },
 
+    /**
+     * 用户进行刷新时加载默认数据
+     */
     loadLocalCacheAction() {
       const token = SessionCache.getCache(LOGIN_TOKEN)
       const userInfo = SessionCache.getCache(USERINFO)
@@ -49,6 +57,10 @@ const useLoginStore = defineStore('loginStore', {
         this.token = token
         this.userInfo = userInfo
         this.userMenus = userMenus
+
+        // 请求roles/departments数据
+        const mainStore = useMainStore()
+        mainStore.fetchEntireDataAction()
 
         // 动态添加路由
         const routes = mapMenusToRouter(this.userMenus)

@@ -30,7 +30,6 @@ function fetchUserListData(searchFromData: any = {}) {
 
   // 2.发送网络请求获取users列表数据
   const queryInfo = { ...pageInfo, ...searchFromData }
-  console.log(queryInfo)
 
   systemStore.postUsersListAction(queryInfo)
 }
@@ -38,6 +37,9 @@ function fetchUserListData(searchFromData: any = {}) {
 // 编辑和删除按钮的点击事件
 function handleDeletebtnClick(id: number) {
   systemStore.deleteUserByIdAction(id)
+}
+function handleEditbtnClick(itemData: any) {
+  emits('editClick', itemData)
 }
 
 // 新建用户的功能
@@ -76,7 +78,7 @@ defineExpose({
         </el-table-column>
         <el-table-column align="center" label="操作">
           <template #default="scope">
-            <el-button icon="Edit" text size="small" type="primary">编辑</el-button>
+            <el-button icon="Edit" text size="small" type="primary" @click="handleEditbtnClick(scope.row)">编辑</el-button>
             <el-button icon="Delete" text size="small" type="danger" @click="handleDeletebtnClick(scope.row.id)">删除</el-button>
           </template>
         </el-table-column>

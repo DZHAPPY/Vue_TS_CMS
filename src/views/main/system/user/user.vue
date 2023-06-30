@@ -7,9 +7,7 @@ import userModal from './components/user-modal.vue'
 // 对content组件进行操作
 const contentRef = ref<InstanceType<typeof userContent>>()
 function handleQueryClick(searchFromData: any) {
-  console.log(123123, searchFromData)
   // 在此处显示searchFromData的内容
-
   contentRef.value?.fetchUserListData(searchFromData)
 }
 
@@ -19,16 +17,19 @@ function handleResetClick() {
 
 // 对modal组件进行操作
 const modalRef = ref<InstanceType<typeof userModal>>()
-function test() {
-  console.log(modalRef)
+function handleAdduserClick() {
   modalRef.value?.setModalVisible()
+}
+
+function handleEditbtnClick(itemData: any) {
+  modalRef.value?.setModalVisible(false, itemData)
 }
 </script>
 
 <template>
   <div class="user">
     <userSearch @query-click="handleQueryClick" @reset-click="handleResetClick" />
-    <userContent ref="contentRef" @addUserClick="test" />
+    <userContent ref="contentRef" @addUserClick="handleAdduserClick" @editClick="handleEditbtnClick" />
     <userModal ref="modalRef" />
   </div>
 </template>
