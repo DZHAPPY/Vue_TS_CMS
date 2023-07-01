@@ -31,7 +31,7 @@ const loginBtnClick = () => {
         <el-tab-pane name="account">
           <paneAccount ref="accountRef"></paneAccount>
           <template #label>
-            <div class="lable">
+            <div class="label">
               <el-icon><User /></el-icon>
               <span class="text">帐号登录</span>
             </div>
@@ -51,9 +51,7 @@ const loginBtnClick = () => {
       <el-checkbox v-model="isRemPwd" label="记住密码" size="large" />
       <el-link type="primary">忘记密码</el-link>
     </div>
-    <el-button class="login-btn" type="primary" size="large" @click="loginBtnClick"
-      >立即登录</el-button
-    >
+    <el-button class="login-btn" type="primary" size="large" @click="loginBtnClick">立即登录</el-button>
   </div>
 </template>
 
@@ -73,7 +71,7 @@ const loginBtnClick = () => {
   .login-btn {
     width: 100%;
   }
-  .lable {
+  .label {
     display: flex;
     align-items: center;
     .text {

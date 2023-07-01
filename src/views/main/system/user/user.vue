@@ -34,19 +34,4 @@ function handleEditbtnClick(itemData: any) {
   </div>
 </template>
 
-<style scoped lang="less">
-.user {
-  .search {
-    background-color: #fff;
-    border-radius: 5px;
-    padding: 20px;
-  }
-  .content {
-    background-color: #fff;
-    margin-top: 20px;
-    padding: 1px 20px;
-    border-radius: 5px;
-    margin-bottom: 30px;
-  }
-}
-</style>
+<style scoped lang="less"></style>

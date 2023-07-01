@@ -4,6 +4,18 @@ import { storeToRefs } from 'pinia'
 import { formatUTC } from '@/utils/format'
 import { ref } from 'vue'
 
+interface Iprops {
+  contentConfig: {
+    header?: {
+      title?: string
+      btnTitle?: string
+    }
+    propsList: any[]
+  }
+}
+
+const props = defineProps<Iprops>()
+
 const emits = defineEmits()
 const currentPage = ref(1)
 const pageSize = ref(10)
@@ -12,8 +24,8 @@ const pageSize = ref(10)
 const systemStore = useSystemStore()
 fetchUserListData()
 
-// 获取usersList数据
-const { usersList, userstotalCount } = storeToRefs(systemStore)
+// 获取pagesList数据
+const { pageList, pageTotalCount } = storeToRefs(systemStore)
 
 // 页码的相关逻辑
 function handleSizeChange() {}
@@ -31,7 +43,7 @@ function fetchUserListData(searchFromData: any = {}) {
   // 2.发送网络请求获取users列表数据
   const queryInfo = { ...pageInfo, ...searchFromData }
 
-  systemStore.postUsersListAction(queryInfo)
+  systemStore.postPageListAction('department', queryInfo)
 }
 
 // 编辑和删除按钮的点击事件
@@ -55,33 +67,31 @@ defineExpose({
 <template>
   <div class="content">
     <div class="header">
-      <h3>用户列表</h3>
-      <el-button type="primary" @click="handleAdduserClick">新建用户</el-button>
+      <h3>{{ contentConfig?.header?.title ?? '数据列表' }}</h3>
+      <el-button type="primary" @click="handleAdduserClick">{{ contentConfig?.header?.btnTitle ?? '新建数据' }}</el-button>
     </div>
     <div class="table">
-      <el-table :data="usersList" border stripe>
-        <el-table-column type="selection" width="55" align="center" />
-        <el-table-column label="序号" align="center" type="index" />
-        <el-table-column prop="name" label="用户名" align="center" />
-        <el-table-column prop="realname" label="真实姓名" align="center" />
-        <el-table-column prop="cellphone" label="手机号码" align="center" />
-        <el-table-column prop="enable" label="状态" align="center" width="90px">
-          <template #default="scope">
-            <el-button :type="scope.row.enable ? 'primary' : 'danger'" plain size="small">{{ scope.row.enable ? '启用' : '禁用' }}</el-button>
+      <el-table :data="pageList" border stripe>
+        <template v-for="item in contentConfig.propsList" :key="item.prop">
+          <template v-if="item.type === 'timer'">
+            <el-table-column align="center" v-bind="item">
+              <template #default="scope">
+                {{ formatUTC(scope.row[item.prop]) }}
+              </template>
+            </el-table-column>
           </template>
-        </el-table-column>
-        <el-table-column prop="createAt" label="创建时间" align="center">
-          <template #default="scope">{{ formatUTC(scope.row.createAt) }}</template>
-        </el-table-column>
-        <el-table-column prop="updateAt" label="更新时间" align="center">
-          <template #default="scope">{{ formatUTC(scope.row.updateAt) }}</template>
-        </el-table-column>
-        <el-table-column align="center" label="操作">
-          <template #default="scope">
-            <el-button icon="Edit" text size="small" type="primary" @click="handleEditbtnClick(scope.row)">编辑</el-button>
-            <el-button icon="Delete" text size="small" type="danger" @click="handleDeletebtnClick(scope.row.id)">删除</el-button>
+          <template v-else-if="item.type === 'handler'">
+            <el-table-column align="center" :label="item.label">
+              <template #default="scope">
+                <el-button icon="Edit" text size="small" type="primary" @click="handleEditbtnClick(scope.row)">编辑</el-button>
+                <el-button icon="Delete" text size="small" type="danger" @click="handleDeletebtnClick(scope.row.id)">删除</el-button>
+              </template>
+            </el-table-column>
           </template>
-        </el-table-column>
+          <template v-else>
+            <el-table-column align="center" v-bind="item" />
+          </template>
+        </template>
       </el-table>
     </div>
     <div class="pagination">
@@ -90,7 +100,7 @@ defineExpose({
         v-model:page-size="pageSize"
         :page-sizes="[10, 20, 30, 40]"
         layout="total, sizes, prev, pager, next, jumper"
-        :total="userstotalCount"
+        :total="pageTotalCount"
         @size-change="handleSizeChange"
         @current-change="handleCurrentChange"
       />
@@ -100,11 +110,6 @@ defineExpose({
 
 <style scoped lang="less">
 .content {
-  background-color: #fff;
-  margin-top: 20px;
-  padding: 15px 20px;
-  border-radius: 5px;
-  margin-bottom: 30px;
   .header {
     display: flex;
     justify-content: space-between;
