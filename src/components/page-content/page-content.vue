@@ -6,6 +6,7 @@ import { ref } from 'vue'
 
 interface Iprops {
   contentConfig: {
+    pageName: string
     header?: {
       title?: string
       btnTitle?: string
@@ -22,7 +23,7 @@ const pageSize = ref(10)
 
 // 发起action，拿到数据
 const systemStore = useSystemStore()
-fetchUserListData()
+fetchPageListData()
 
 // 获取pagesList数据
 const { pageList, pageTotalCount } = storeToRefs(systemStore)
@@ -30,25 +31,27 @@ const { pageList, pageTotalCount } = storeToRefs(systemStore)
 // 页码的相关逻辑
 function handleSizeChange() {}
 function handleCurrentChange() {
-  fetchUserListData()
+  fetchPageListData()
 }
 
 // 定义函数用于发送网络请求
-function fetchUserListData(searchFromData: any = {}) {
+function fetchPageListData(searchFromData: any = {}) {
+  console.log(123)
+
   // 1.获取offset/size
   const size = pageSize.value
   const offset = (currentPage.value - 1) * size
   const pageInfo = { size, offset }
 
-  // 2.发送网络请求获取users列表数据
+  // 2.发送网络请求获取page列表数据
   const queryInfo = { ...pageInfo, ...searchFromData }
 
-  systemStore.postPageListAction('department', queryInfo)
+  systemStore.postPageListAction(props.contentConfig.pageName, queryInfo)
 }
 
 // 编辑和删除按钮的点击事件
 function handleDeletebtnClick(id: number) {
-  systemStore.deleteUserByIdAction(id)
+  systemStore.deletePageByIdAction(props.contentConfig.pageName, id)
 }
 function handleEditbtnClick(itemData: any) {
   emits('editClick', itemData)
@@ -56,11 +59,11 @@ function handleEditbtnClick(itemData: any) {
 
 // 新建用户的功能
 function handleAdduserClick() {
-  emits('addUserClick')
+  emits('addPageClick')
 }
 
 defineExpose({
-  fetchUserListData
+  fetchPageListData
 })
 </script>
 
@@ -117,7 +120,7 @@ defineExpose({
   }
 
   .pagination {
-    margin-top: 20px;
+    margin: 20px 0;
     display: flex;
     justify-content: center;
   }
