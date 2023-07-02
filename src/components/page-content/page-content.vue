@@ -12,6 +12,7 @@ interface Iprops {
       btnTitle?: string
     }
     propsList: any[]
+    childrenTree?: any
   }
 }
 
@@ -74,7 +75,7 @@ defineExpose({
       <el-button type="primary" @click="handleAdduserClick">{{ contentConfig?.header?.btnTitle ?? '新建数据' }}</el-button>
     </div>
     <div class="table">
-      <el-table :data="pageList" border stripe>
+      <el-table :data="pageList" border stripe v-bind="contentConfig?.childrenTree">
         <template v-for="item in contentConfig.propsList" :key="item.prop">
           <template v-if="item.type === 'timer'">
             <el-table-column align="center" v-bind="item">
@@ -113,6 +114,10 @@ defineExpose({
 
 <style scoped lang="less">
 .content {
+  background-color: #fff;
+  padding: 20px;
+  margin-top: 20px;
+  border-radius: 5px;
   .header {
     display: flex;
     justify-content: space-between;

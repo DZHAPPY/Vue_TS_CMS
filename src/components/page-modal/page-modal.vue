@@ -8,8 +8,10 @@ import type { FormRules, ElForm } from 'element-plus'
 interface Iprops {
   modalConfig: {
     pageName: string
-    title: string
-    header: {}
+    header: {
+      addTitle: string
+      editTitle: string
+    }
     formItems: any[]
   }
 }
@@ -19,7 +21,7 @@ const props = defineProps<Iprops>()
 const systemStore = useSystemStore()
 const isNewRef = ref(true)
 const editData = ref()
-const modalTitle = ref('新建')
+const modalTitle = ref()
 
 // 定义表单数据
 const initialValue: any = {}
@@ -33,10 +35,9 @@ const isShowDialog = ref(false)
 
 // 2. 定义改变isShowDialog的方法
 function setModalVisible(isAddUser: boolean = true, itemData?: any) {
-  console.log(itemData)
-
+  modalTitle.value = props.modalConfig.header.addTitle
   if (itemData && !isAddUser) {
-    modalTitle.value = '编辑'
+    modalTitle.value = props.modalConfig.header.editTitle
     isNewRef.value = isAddUser
     editData.value = itemData
     for (let key in addFormData) {
@@ -97,7 +98,7 @@ defineExpose({ setModalVisible })
 </script>
 
 <template>
-  <el-dialog v-model="isShowDialog" :title="modalTitle + props.modalConfig.title" width="30%" center>
+  <el-dialog v-model="isShowDialog" :title="modalTitle" width="30%" center>
     <el-form :model="addFormData" label-width="80px" size="large" :rules="rules" ref="formRef">
       <template v-for="item in modalConfigRef.formItems" :key="item.prop">
         <el-form-item :label="item.label" :prop="item.prop">

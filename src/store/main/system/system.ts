@@ -88,7 +88,7 @@ const useSystemStore = defineStore('system', {
 
       const { totalCount, list } = PageListResult.data
       this.pageList = list
-      this.pageTotalCount = totalCount
+      this.pageTotalCount = parseInt(totalCount)
     },
 
     async deletePageByIdAction(pageName: string, id: number) {
