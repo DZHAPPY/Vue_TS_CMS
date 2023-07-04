@@ -830,6 +830,11 @@ copy-anything@^2.0.1:
   dependencies:
     is-what "^3.14.1"
 
+countup.js@^2.7.0:
+  version "2.7.0"
+  resolved "https://registry.npmmirror.com/countup.js/-/countup.js-2.7.0.tgz#a5521bd935f0ae83417d0128e73f2a2d2543c9c7"
+  integrity sha512-IP9nYLGgW//0If73eXQdFlReGhpFGHaStqB1v82FknxnUWueF6HFuuOXySW4sEDMc88PsZL1EOn/NPkfTZalmQ==
+
 cross-spawn@^6.0.5:
   version "6.0.5"
   resolved "https://registry.npmmirror.com/cross-spawn/-/cross-spawn-6.0.5.tgz#4a5ec7c64dfae22c3a14124dbacdee846d80cbc4"
